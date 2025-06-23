@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  FlatList,
+  useWindowDimensions,
+} from "react-native";
 import Title from "../components/ui/Title";
 import { useEffect, useMemo, useState } from "react";
 import NumberContainer from "../components/game/NumberContainer";
@@ -70,10 +76,10 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     }
   }, [currentGuess, userNumber, onGameOver]);
 
-  return (
-    <View style={styles.screen}>
-      <Title>Opponent's guess</Title>
+  const { width } = useWindowDimensions();
 
+  let content = (
+    <>
       <NumberContainer>{currentGuess}</NumberContainer>
 
       <Card>
@@ -95,6 +101,36 @@ const GameScreen = ({ userNumber, onGameOver }) => {
           </View>
         </View>
       </Card>
+    </>
+  );
+
+  if (width > 420) {
+    content = (
+      <>
+        <View style={styles.buttonContainerWide}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler("lower")}>
+              <Ionicons name="remove" size={24} />
+            </PrimaryButton>
+          </View>
+
+          <NumberContainer>{currentGuess}</NumberContainer>
+
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={() => nextGuessHandler("greater")}>
+              <Ionicons name="add" size={24} />
+            </PrimaryButton>
+          </View>
+        </View>
+      </>
+    );
+  }
+
+  return (
+    <View style={styles.screen}>
+      <Title>Opponent's guess</Title>
+
+      {content}
 
       <View style={styles.listContainer}>
         {/* {guessRounds?.map((guessRound) => (
@@ -124,6 +160,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 12,
+    alignItems: "center",
   },
   instructionText: {
     marginBottom: 12,
@@ -137,5 +174,9 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     paddingTop: 16,
+  },
+  buttonContainerWide: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
