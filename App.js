@@ -8,9 +8,7 @@ import Colors from "./constants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
-
-SplashScreen.preventAutoHideAsync();
+import Loader from "./components/ui/Loader";
 
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
@@ -55,32 +53,24 @@ export default function App() {
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
 
-  useEffect(() => {
-    async function hideSplash() {
-      if (fontsLoaded) {
-        await SplashScreen.hideAsync();
-      }
-    }
-
-    hideSplash();
-  }, [fontsLoaded]);
-
   return (
     <>
       <StatusBar style="light" />
-      <LinearGradient
-        style={styles.rootScreen}
-        colors={[Colors.primary700, Colors.accent500]}
-      >
-        <ImageBackground
+      <Loader isFetching={!fontsLoaded}>
+        <LinearGradient
           style={styles.rootScreen}
-          source={require("./assets/images/background.png")}
-          resizeMode="cover"
-          imageStyle={{ opacity: 0.15 }}
+          colors={[Colors.primary700, Colors.accent500]}
         >
-          <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
-        </ImageBackground>
-      </LinearGradient>
+          <ImageBackground
+            style={styles.rootScreen}
+            source={require("./assets/images/background.png")}
+            resizeMode="cover"
+            imageStyle={{ opacity: 0.15 }}
+          >
+            <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+          </ImageBackground>
+        </LinearGradient>
+      </Loader>
     </>
   );
 }
