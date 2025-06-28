@@ -1,14 +1,16 @@
 import { StyleSheet, ImageBackground } from "react-native";
 import StartGameScreen from "./screens/StartGameScreen";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameScreen from "./screens/GameScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "./constants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
-import AppLoading from "expo-app-loading";
 import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
@@ -53,9 +55,15 @@ export default function App() {
     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  useEffect(() => {
+    async function hideSplash() {
+      if (fontsLoaded) {
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    hideSplash();
+  }, [fontsLoaded]);
 
   return (
     <>
