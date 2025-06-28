@@ -49,7 +49,7 @@ function StartGameScreen({ onPickNumber }) {
         <View
           style={[styles.rootContainer, { marginTop: height < 420 ? 30 : 100 }]}
         >
-          <Title>Guess My Number</Title>
+          <Title>Guess The Number</Title>
           <Card>
             <InstructionText>Enter a number</InstructionText>
 
